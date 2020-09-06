@@ -9,14 +9,19 @@ import kotlinx.coroutines.launch
 
 
 class ViewModelFireBase : ViewModel() {
-
+    private val repository = RepositoryFireBase()
 
     private val _data = MutableLiveData<QuerySnapshot>()
     val data: LiveData<QuerySnapshot> get() = _data
+
     init {
         viewModelScope.launch {
-            _data.value = FireBaseAccess.getListOfMedCenters()
+            _data.value = repository.getDataBase()
         }
+    }
+
+    suspend fun updateData(document: String, data: HashMap<String, Int>) {
+        repository.updateData(document, data)
     }
 
 

@@ -1,7 +1,5 @@
 package by.amakarevich.medlike
 
-import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,16 +8,16 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import by.amakarevich.medlike.data.MedCenter
 import coil.api.load
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.recycler_item.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FragmentDetailMedCenter : Fragment() {
     private val myViewModel: ViewModelFireBase by activityViewModels()
@@ -88,8 +86,13 @@ class FragmentDetailMedCenter : Fragment() {
             "rating" to rating(numberOfLikes, numberOfDislikes),
             "numberOfLikes" to numberOfLikes
         )
-        db.collection("medcenters").document(arguments?.getString(NAME).toString())
-            .set(data, SetOptions.merge())
+        val scope = CoroutineScope(Dispatchers.Main)
+        scope.launch {
+            myViewModel.updateData(arguments?.getString(NAME).toString(), data)
+        }
+
+      /*  db.collection("medcenters").document(arguments?.getString(NAME).toString())
+            .set(data, SetOptions.merge())*/
     }
 
     private fun updateFireBaseRatingMinusOne() {
@@ -104,8 +107,13 @@ class FragmentDetailMedCenter : Fragment() {
             "rating" to rating(numberOfLikes, numberOfDislikes),
             "numberOfDislikes" to numberOfDislikes
         )
-        db.collection("medcenters").document(arguments?.getString(NAME).toString())
-            .set(data, SetOptions.merge())
+        val scope = CoroutineScope(Dispatchers.Main)
+        scope.launch {
+            myViewModel.updateData(arguments?.getString(NAME).toString(), data)
+        }
+
+       /* db.collection("medcenters").document(arguments?.getString(NAME).toString())
+            .set(data, SetOptions.merge())*/
     }
 
     private fun rating(like: Int, dislike: Int): Int {
