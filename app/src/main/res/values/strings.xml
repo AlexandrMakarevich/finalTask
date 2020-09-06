@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MedLike</string>
+    <string name="name">NAME</string>
+    <string name="address">ADDRESS</string>
+    <string name="like">LIKE</string>
+    <string name="rating">033</string>
+    <string name="numberOfLike">Количество лайков:</string>
+    <string name="numberOfDislike">Количество дизлайков:</string>
+    <string name="setLikeOrDislike">Оцените медцентр</string>
+</resources>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1060961338320",
+    "firebase_url": "https://medlike-122e5.firebaseio.com",
+    "project_id": "medlike-122e5",
+    "storage_bucket": "medlike-122e5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1060961338320:android:20b6b6df151df95caa2fd5",
+        "android_client_info": {
+          "package_name": "by.amakarevich.medlike"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1060961338320-0uj08qd8q5g234nldss6rn5bmia4lsh0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDX1e2zG2iREgQG9rpH97SOh1uaMdaGvs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1060961338320-0uj08qd8q5g234nldss6rn5bmia4lsh0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
