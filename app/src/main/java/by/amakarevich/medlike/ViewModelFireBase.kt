@@ -1,14 +1,13 @@
 package by.amakarevich.medlike
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch
 
 
 class ViewModelFireBase : ViewModel() {
+
+
     private val repository = RepositoryFireBase()
 
     private val _data = MutableLiveData<QuerySnapshot>()
@@ -20,8 +19,28 @@ class ViewModelFireBase : ViewModel() {
         }
     }
 
-    suspend fun updateData(document: String, data: HashMap<String, Int>) {
-        repository.updateData(document, data)
+    suspend fun updateDataMedCentres(document: String, data: HashMap<String, Int>) {
+        repository.updateDataMedCentres(document, data)
+    }
+
+    suspend fun updateDataUserMedCenterLike(
+        userID: String,
+        nameMedCenter: String,
+        data: HashMap<String, String>
+    ) {
+        repository.updateDataUserMedCenterLike(userID, nameMedCenter, data)
+    }
+
+    suspend fun likeIs(name: String, userID: String): String {
+        return repository.likeIs(name, userID)
+    }
+
+    suspend fun addMedCenterInUserMedCenterLike(
+        user: String,
+        nameMedCenter: String,
+        data: Map<String, Any>
+    ) {
+        repository.addMedCenterInUserMedCenterLike(user, nameMedCenter, data)
     }
 
 
