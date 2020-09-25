@@ -11,11 +11,10 @@ import by.amakarevich.medlike.R
 import by.amakarevich.medlike.data.MedCenter
 import coil.api.load
 
-
 class AdapterMed(private val onClickListenerRating: OnClickListenerRating) :
     RecyclerView.Adapter<ViewHolderMed>() {
 
-    private val items = mutableListOf<MedCenter>()
+    private var items = listOf<MedCenter>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMed {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_item, null)
@@ -43,8 +42,8 @@ class AdapterMed(private val onClickListenerRating: OnClickListenerRating) :
         }
     }
 
-    fun addItems(newItems: List<MedCenter>) {
-        items.addAll(newItems)
+    fun setItems(newItems: List<MedCenter>) {
+        items = newItems
         notifyDataSetChanged()
     }
 }

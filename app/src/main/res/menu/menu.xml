@@ -5,6 +5,6 @@
         android:id="@+id/signOut"
         android:title="@string/signOut"
         android:icon="@drawable/ic_outline_exit_to_app_24"
-        app:showAsAction="ifRoom">
-    </item>
+        app:showAsAction="ifRoom"/>
+
 </menu>

@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
             return getSharedPreferences("Preference", MODE_PRIVATE)
         }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -47,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         initViewModel()
         initFragment()
         initSharedPreference()
-
     }
 
 
@@ -154,4 +152,5 @@ class MainActivity : AppCompatActivity() {
             spref.edit().putString(EnumSharedPreferences.UserID.toString(), "Anonimus").apply()
         }
     }
+
 }

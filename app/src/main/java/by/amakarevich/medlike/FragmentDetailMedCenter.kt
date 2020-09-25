@@ -14,16 +14,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import coil.api.load
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class FragmentDetailMedCenter : Fragment() {
-    private val myViewModel: ViewModelFireBase by activityViewModels()
-    private val db = Firebase.firestore
 
+    private val myViewModel: ViewModelFireBase by activityViewModels()
     private val spref: SharedPreferences?
         get() {
             return activity?.getSharedPreferences("Preference", AppCompatActivity.MODE_PRIVATE)
@@ -87,7 +84,6 @@ class FragmentDetailMedCenter : Fragment() {
             Log.d("MyLog", "LIIIIIIKE=============== $like")
         }
 
-
         myViewModel.numberOfLikes.value = arguments?.getInt(NUMBEROFLIKES)
         myViewModel.numberOfDislikes.value = arguments?.getInt(NUMBEROFDISLIKES)
 
@@ -134,7 +130,7 @@ class FragmentDetailMedCenter : Fragment() {
         var numberOfLikes = arguments?.getInt(NUMBEROFLIKES)!!
         var numberOfDislikes: Int = arguments?.getInt(NUMBEROFDISLIKES)!!
 
-        when (like){
+        when (like) {
             EnumLike.LIKE.toString() -> {
                 Log.d("MyLog", "It is impossible")
             }
@@ -157,7 +153,8 @@ class FragmentDetailMedCenter : Fragment() {
         like = EnumLike.LIKE.toString()
         val data = hashMapOf(
             "rating" to rating(numberOfLikes, numberOfDislikes),
-            "numberOfLikes" to numberOfLikes
+            "numberOfLikes" to numberOfLikes,
+            "numberOfDislikes" to numberOfDislikes
         )
         val scope = CoroutineScope(Dispatchers.Main)
         scope.launch {
@@ -181,7 +178,7 @@ class FragmentDetailMedCenter : Fragment() {
         var numberOfLikes = arguments?.getInt(NUMBEROFLIKES)!!
         var numberOfDislikes: Int = arguments?.getInt(NUMBEROFDISLIKES)!!
 
-        when (like){
+        when (like) {
             EnumLike.LIKE.toString() -> {
                 numberOfDislikes += 1
                 numberOfLikes -= 1
@@ -204,6 +201,7 @@ class FragmentDetailMedCenter : Fragment() {
         like = EnumLike.DISLIKE.toString()
         val data = hashMapOf(
             "rating" to rating(numberOfLikes, numberOfDislikes),
+            "numberOfLikes" to numberOfLikes,
             "numberOfDislikes" to numberOfDislikes
         )
         val scope = CoroutineScope(Dispatchers.Main)
@@ -251,6 +249,7 @@ class FragmentDetailMedCenter : Fragment() {
                     putInt(RATING, rating)
                 }
             }
+
         private const val IMAGE_URL = "ImageUrl"
         private const val NAME = "Name"
         private const val NUMBEROFLIKES = "NumberOfLikes"

@@ -1,7 +1,8 @@
 package by.amakarevich.medlike
 
 import androidx.lifecycle.*
-import com.google.firebase.firestore.QuerySnapshot
+import by.amakarevich.medlike.data.MedCenter
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
@@ -10,13 +11,19 @@ class ViewModelFireBase : ViewModel() {
 
     private val repository = RepositoryFireBase()
 
-    private val _data = MutableLiveData<QuerySnapshot>()
-    val data: LiveData<QuerySnapshot> get() = _data
+    private val _data = MutableLiveData<List<MedCenter>>()
+    val data: LiveData<List<MedCenter>> get() = _data
 
     init {
         viewModelScope.launch {
-            _data.value = repository.getDataBase()
+            repository.getListOfSnapshotMedCenters().collect {
+            _data.value = it
+            }
         }
+    }
+
+    suspend fun getListOfMedCenters() : List<MedCenter>{
+        return repository.getDataBase()
     }
 
     suspend fun updateDataMedCentres(document: String, data: HashMap<String, Int>) {
@@ -58,5 +65,6 @@ class ViewModelFireBase : ViewModel() {
     val numberOfDislikes: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
+
 
 }

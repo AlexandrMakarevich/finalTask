@@ -8,5 +8,7 @@
     <string name="numberOfDislike">Количество дизлайков:</string>
     <string name="setLikeOrDislike">Оцените медцентр</string>
     <string name="signOut">Выход</string>
+    <string name="changeTheme">Изменить тему</string>
+
 
 </resources>

@@ -1,21 +1,25 @@
 package by.amakarevich.medlike
 
 import android.util.Log
-import com.google.firebase.firestore.QuerySnapshot
+import by.amakarevich.medlike.data.MedCenter
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 
 class RepositoryFireBase() {
 
     private val db = Firebase.firestore
 
-    suspend fun getDataBase(): QuerySnapshot? {
+    suspend fun getDataBase(): List<MedCenter> {
         return FireBaseAccess.getListOfMedCenters()
     }
 
-    //========================================================
+    suspend fun getListOfSnapshotMedCenters(): Flow<List<MedCenter>> {
+        return FireBaseAccess.getListOfSnapshotMedCenters()
+    }
+
     suspend fun updateDataMedCentres(document: String, data: HashMap<String, Int>) {
         db
             .collection("medcenters")
@@ -23,7 +27,6 @@ class RepositoryFireBase() {
             .set(data, SetOptions.merge())
             .await()
     }
-//=========================================================
 
     suspend fun updateDataUserMedCenterLike(
         userID: String,
@@ -56,7 +59,7 @@ class RepositoryFireBase() {
                 .addOnSuccessListener { documents ->
                     for (doc in documents) {
                         like = doc.data["like"].toString()
-                        Log.d("MyLog", "LIIIIIIKE FROM LIKEIS=============== $like")
+                        Log.d("MyLog", "LIIIIIIKE FROM LIKEIS========== $like")
                     }
                 }
                 .await()
@@ -78,3 +81,4 @@ class RepositoryFireBase() {
             .await()
     }
 }
+

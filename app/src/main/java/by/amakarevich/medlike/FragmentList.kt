@@ -6,16 +6,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import by.amakarevich.medlike.adapter.AdapterMed
 import by.amakarevich.medlike.adapter.OnClickListenerRating
-import by.amakarevich.medlike.data.MedCenter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FragmentList : Fragment(), OnClickListenerRating {
 
@@ -28,13 +30,20 @@ class FragmentList : Fragment(), OnClickListenerRating {
             return mFirebaseAuth.currentUser
         }
 
+
     private val myViewModel: ViewModelFireBase by activityViewModels()
     private val adapterMed = AdapterMed(this)
-    private var state = true
+    private val progressBar: ProgressBar?
+        get() {
+            return view?.findViewById(R.id.progressBar)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("MyLog", "OnCreate FragmentList")
+        CoroutineScope(Dispatchers.Main).launch {
+            adapterMed.setItems(myViewModel.getListOfMedCenters())
+        }
     }
 
     override fun onCreateView(
@@ -44,32 +53,25 @@ class FragmentList : Fragment(), OnClickListenerRating {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_list, container, false)
         Log.d("MyLog", "OnCreateView FragmentList")
+
+
         val recyclerView: RecyclerView? = view?.findViewById(R.id.recyclerView)
         recyclerView?.apply {
             this.adapter = adapterMed
         }
+
+        myViewModel.data.observe(viewLifecycleOwner, Observer {
+            Log.d("MyLog", it.toString())
+            progressBar?.visibility = ProgressBar.INVISIBLE
+            adapterMed.setItems(it)
+            it ?: return@Observer
+        })
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("MyLog", "OnViewCreated FragmentList")
-
-
-        myViewModel.data.observe(viewLifecycleOwner, Observer {
-            val list: MutableList<MedCenter> = mutableListOf()
-            for (document in it) {
-                val medCenter = document.toObject(MedCenter::class.java)
-                list.add(medCenter)
-            }
-            Log.d("MyLog", list.toString())
-
-            if (state) {
-                adapterMed.addItems(list)
-            }
-            state = false
-            it ?: return@Observer
-        })
     }
 
     override fun onItemClick(
@@ -110,7 +112,6 @@ class FragmentList : Fragment(), OnClickListenerRating {
         private const val ARG_PARAM = "param"
     }
 }
-
 
 // add Medcenters===================================================================================
 /*val button = view.findViewById<Button>(R.id.buttonAdd)
