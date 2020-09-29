@@ -1,6 +1,7 @@
 package by.amakarevich.medlike
 
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -8,6 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
@@ -42,12 +44,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.d("MyLog", "MainActitvity")
+        Log.d("MyLog", "MainActitvity_OnCreate")
+        initSharedPreference()
         initViewModel()
         initFragment()
-        initSharedPreference()
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -63,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         menu?.findItem(R.id.signOut)?.isVisible = mFirebaseUser != null
+        menu?.findItem(R.id.dark_bright)?.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -79,6 +81,20 @@ class MainActivity : AppCompatActivity() {
                 mFirebaseAuth.signOut()
                 invalidateOptionsMenu()
             }
+            R.id.dark_bright -> {
+                val currentThemeMode = spref.getString(themeMode, "")
+                Log.d("MyLog", "MainActivity_currentThemeMode == $currentThemeMode")
+                when (currentThemeMode) {
+                    EnumThemeMode.BRIGHT.toString() -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        spref.edit().putString(themeMode, EnumThemeMode.DARK.toString()).apply()
+                    }
+                    EnumThemeMode.DARK.toString() -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        spref.edit().putString(themeMode, EnumThemeMode.BRIGHT.toString()).apply()
+                    }
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -94,13 +110,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViewModel() {
-        val currentMedCenter = Observer<MutableList<Any?>> { currentMedCenter ->
+        val currentMedCenter = Observer<List<Any?>> { currentMedCenter ->
             showFragmentDETAILMEDCENTER(
                 currentMedCenter[0] as String, // image
                 currentMedCenter[1] as String, // name
                 currentMedCenter[2] as Int, // numberOfLikes
-                currentMedCenter[3] as Int,  // numberOfDislikes
-                currentMedCenter[4] as Int  // rating
+                currentMedCenter[3] as Int, // numberOfDislikes
+                currentMedCenter[4] as Int // rating
             )
         }
         model.currentMedCenter.observe(this, currentMedCenter)
@@ -115,6 +131,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         title = resources.getString(R.string.setLikeOrDislike)
         mMenu?.findItem(R.id.signOut)?.isVisible = false
+        mMenu?.findItem(R.id.dark_bright)?.isVisible = false
         val fragmentDetailMedCenter =
             FragmentDetailMedCenter.newInstance(
                 imageUrl,
@@ -135,7 +152,6 @@ class MainActivity : AppCompatActivity() {
         Log.d("MyLog", "FragmentDetailStarted")
     }
 
-
     private fun initFragment() {
         title = resources.getString(R.string.app_name)
         val fragmentLIST = FragmentList.newInstance()
@@ -144,13 +160,18 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.add(R.id.container, fragmentLIST, "FRAGMENT_LIST")
         fragmentTransaction.commit()
         Log.d("MyLog", "startInitFragment")
-
     }
 
     private fun initSharedPreference() {
         if (!spref.contains(EnumSharedPreferences.UserID.toString())) {
             spref.edit().putString(EnumSharedPreferences.UserID.toString(), "Anonimus").apply()
         }
+        if (!spref.contains(themeMode)) {
+            spref.edit().putString(themeMode, EnumThemeMode.DARK.toString()).apply()
+        }
     }
 
+    companion object {
+        val themeMode: String = "THEME_MODE"
+    }
 }

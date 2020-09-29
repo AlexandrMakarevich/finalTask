@@ -30,7 +30,6 @@ class FragmentList : Fragment(), OnClickListenerRating {
             return mFirebaseAuth.currentUser
         }
 
-
     private val myViewModel: ViewModelFireBase by activityViewModels()
     private val adapterMed = AdapterMed(this)
     private val progressBar: ProgressBar?
@@ -53,7 +52,6 @@ class FragmentList : Fragment(), OnClickListenerRating {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_list, container, false)
         Log.d("MyLog", "OnCreateView FragmentList")
-
 
         val recyclerView: RecyclerView? = view?.findViewById(R.id.recyclerView)
         recyclerView?.apply {
@@ -92,9 +90,8 @@ class FragmentList : Fragment(), OnClickListenerRating {
             intent.putExtra("NumberOfDislikes", numberOfDislikes)
             intent.putExtra("Rating", rating)
             startActivity(intent)
-
         } else {
-            val list = mutableListOf(imageUrl, name, numberOfLikes, numberOfDislikes, rating)
+            val list = listOf(imageUrl, name, numberOfLikes, numberOfDislikes, rating)
             myViewModel.currentMedCenter.value = list
             Log.d("MyLog", mFirebaseUser!!.uid) // уникальный идентификатор пользователя
         }
@@ -112,7 +109,6 @@ class FragmentList : Fragment(), OnClickListenerRating {
         private const val ARG_PARAM = "param"
     }
 }
-
 // add Medcenters===================================================================================
 /*val button = view.findViewById<Button>(R.id.buttonAdd)
 val db = Firebase.firestore
@@ -148,8 +144,5 @@ button.setOnClickListener {
     list.forEach {
         db.collection("medcenters").document(it.name.toString()).set(it)
     }
-
 }*/
-// add Medcenters===================================================================================
-
-
+// add Medcenters==============================================================================

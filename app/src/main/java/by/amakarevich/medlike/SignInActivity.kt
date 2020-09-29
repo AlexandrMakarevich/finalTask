@@ -21,13 +21,11 @@ class SignInActivity : AppCompatActivity() {
             return getSharedPreferences("Preference", MODE_PRIVATE)
         }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("MyLog", "SignActivity_OnCreate")
 
         mSavedInstanceState = savedInstanceState
-
 
         val providers = arrayListOf(AuthUI.IdpConfig.EmailBuilder().build())
         startActivityForResult(
@@ -59,7 +57,6 @@ class SignInActivity : AppCompatActivity() {
                 )
                 myViewModel.currentMedCenter.value = list
                 finish()
-
             } else {
                 Log.d("MyLog", "RESULT_FAILED")
                 finish()

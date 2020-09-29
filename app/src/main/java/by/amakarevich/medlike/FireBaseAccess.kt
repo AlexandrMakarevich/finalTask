@@ -21,7 +21,10 @@ object FireBaseAccess {
             .addSnapshotListener { value, _ ->
                 list.clear()
                 for (doc in value!!) {
-                    Log.d("MyLog", "FireBaseAccess(getListOfMedCenters_addSnapshotListener): doc = $doc")
+                    Log.d(
+                        "MyLog",
+                        "FireBaseAccess(getListOfMedCenters_addSnapshotListener): doc = $doc"
+                    )
                     val medCenter = doc.toObject(MedCenter::class.java)
                     list.add(medCenter)
                 }
@@ -39,7 +42,10 @@ object FireBaseAccess {
                 .get()
                 .addOnSuccessListener {
                     for (document in it) {
-                        Log.d("MyLog", "FireBaseAccess(getListOfMedCenters_addOnSuccessListener): document = $document")
+                        Log.d(
+                            "MyLog",
+                            "FireBaseAccess(addOnSuccessListener):document = $document"
+                        )
                         val medCenter = document.toObject(MedCenter::class.java)
                         list.add(medCenter)
                     }
@@ -50,9 +56,4 @@ object FireBaseAccess {
             emptyList()
         }
     }
-
-
-
-
 }
-

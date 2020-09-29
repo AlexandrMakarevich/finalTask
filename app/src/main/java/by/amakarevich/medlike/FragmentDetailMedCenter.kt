@@ -72,8 +72,7 @@ class FragmentDetailMedCenter : Fragment() {
                     )
                     val user =
                         spref?.getString(EnumSharedPreferences.UserID.toString(), "").toString()
-                    val scope = CoroutineScope(Dispatchers.Main)
-                    scope.launch {
+                    CoroutineScope(Dispatchers.Main).launch {
                         myViewModel.addMedCenterInUserMedCenterLike(user, nameMedCenter, data)
                     }
                 }
@@ -230,7 +229,6 @@ class FragmentDetailMedCenter : Fragment() {
         return rating.toInt()
     }
 
-
     companion object {
         @JvmStatic
         fun newInstance(
@@ -255,9 +253,5 @@ class FragmentDetailMedCenter : Fragment() {
         private const val NUMBEROFLIKES = "NumberOfLikes"
         private const val NUMBEROFDISLIKES = "numberOfDislikes"
         private const val RATING = "Rating"
-
     }
-
 }
-
-

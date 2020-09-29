@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/dark_bright"
+        android:title="@string/changeTheme"
+        android:icon="@drawable/ic_outline_nights_stay_24"
+        app:showAsAction="always"/>
+
     <item
         android:id="@+id/signOut"
         android:title="@string/signOut"
         android:icon="@drawable/ic_outline_exit_to_app_24"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
 </menu>

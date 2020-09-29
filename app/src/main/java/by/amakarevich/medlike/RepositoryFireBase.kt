@@ -35,7 +35,7 @@ class RepositoryFireBase() {
     ) {
         Log.d(
             "MyLog",
-            "FROM updateDataUserMedCenterLike=============== $userID  ======  $nameMedCenter ==== ${data["like"]}"
+            "FROM updateDataUserMedCenterLike= $userID ==  $nameMedCenter ==== ${data["like"]}"
         )
         db
             .collection("userMedCenterLike")
@@ -81,4 +81,3 @@ class RepositoryFireBase() {
             .await()
     }
 }
-

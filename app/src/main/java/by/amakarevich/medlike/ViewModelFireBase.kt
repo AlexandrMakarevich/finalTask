@@ -1,16 +1,16 @@
 package by.amakarevich.medlike
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import by.amakarevich.medlike.data.MedCenter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-
 class ViewModelFireBase : ViewModel() {
 
-
     private val repository = RepositoryFireBase()
-
     private val _data = MutableLiveData<List<MedCenter>>()
     val data: LiveData<List<MedCenter>> get() = _data
 
@@ -22,7 +22,7 @@ class ViewModelFireBase : ViewModel() {
         }
     }
 
-    suspend fun getListOfMedCenters() : List<MedCenter>{
+    suspend fun getListOfMedCenters(): List<MedCenter> {
         return repository.getDataBase()
     }
 
@@ -49,13 +49,11 @@ class ViewModelFireBase : ViewModel() {
     ) {
         repository.addMedCenterInUserMedCenterLike(user, nameMedCenter, data)
     }
-
-
     //
     // if "currentMedCenter" was changed from FragmentList
     // call FragmentDETAILMEDCENTER from MainActivity
-    val currentMedCenter: MutableLiveData<MutableList<Any?>> by lazy {
-        MutableLiveData<MutableList<Any?>>()
+    val currentMedCenter: MutableLiveData<List<Any?>> by lazy {
+        MutableLiveData<List<Any?>>()
     }
 
     val numberOfLikes: MutableLiveData<Int> by lazy {
@@ -65,6 +63,4 @@ class ViewModelFireBase : ViewModel() {
     val numberOfDislikes: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
     }
-
-
 }

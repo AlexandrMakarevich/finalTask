@@ -55,7 +55,6 @@ class ViewHolderMed(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val textViewRating = itemView.findViewById<TextView>(R.id.rating)
     val imageMedCenter = itemView.findViewById<ImageView>(R.id.image_medcenter)
     val imageRating = itemView.findViewById<ImageView>(R.id.image_rating)
-
 }
 
 interface OnClickListenerRating {

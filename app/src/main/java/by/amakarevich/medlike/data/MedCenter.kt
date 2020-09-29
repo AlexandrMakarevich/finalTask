@@ -1,6 +1,6 @@
 package by.amakarevich.medlike.data
 
-data class MedCenter (
+data class MedCenter(
     val name: String? = null,
     val address: String? = null,
     val rating: Int? = null,
