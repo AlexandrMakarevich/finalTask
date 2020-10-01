@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
             return getSharedPreferences("Preference", MODE_PRIVATE)
         }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -82,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                 invalidateOptionsMenu()
             }
             R.id.dark_bright -> {
+                isloadDetail = false
                 val currentThemeMode = spref.getString(themeMode, "")
                 Log.d("MyLog", "MainActivity_currentThemeMode == $currentThemeMode")
                 when (currentThemeMode) {
@@ -132,34 +135,40 @@ class MainActivity : AppCompatActivity() {
         title = resources.getString(R.string.setLikeOrDislike)
         mMenu?.findItem(R.id.signOut)?.isVisible = false
         mMenu?.findItem(R.id.dark_bright)?.isVisible = false
-        val fragmentDetailMedCenter =
-            FragmentDetailMedCenter.newInstance(
-                imageUrl,
-                name,
-                numberOfLikes,
-                numberOfDislikes,
-                rating
+
+        if (isloadDetail) {
+            val fragmentDetailMedCenter =
+                FragmentDetailMedCenter.newInstance(
+                    imageUrl,
+                    name,
+                    numberOfLikes,
+                    numberOfDislikes,
+                    rating
+                )
+            val fragmentManager: FragmentManager = supportFragmentManager
+            val fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.replace(
+                R.id.container,
+                fragmentDetailMedCenter,
+                "FRAGMENT_DetailMedCenter"
             )
-        val fragmentManager: FragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(
-            R.id.container,
-            fragmentDetailMedCenter,
-            "FRAGMENT_DetailMedCenter"
-        )
-            .addToBackStack("FragmentStack")
-        fragmentTransaction.commit()
-        Log.d("MyLog", "FragmentDetailStarted")
+                .addToBackStack("FragmentStack")
+            fragmentTransaction.commit()
+            Log.d("MyLog", "FragmentDetailStarted")
+        }
     }
 
     private fun initFragment() {
         title = resources.getString(R.string.app_name)
-        val fragmentLIST = FragmentList.newInstance()
-        val fragmentManager: FragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.container, fragmentLIST, "FRAGMENT_LIST")
-        fragmentTransaction.commit()
-        Log.d("MyLog", "startInitFragment")
+        if (isloadDetail) {
+            val fragmentLIST = FragmentList.newInstance()
+            val fragmentManager: FragmentManager = supportFragmentManager
+            val fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.add(R.id.container, fragmentLIST, "FRAGMENT_LIST")
+            fragmentTransaction.commit()
+            Log.d("MyLog", "startInitFragment")
+        }
+        isloadDetail = false
     }
 
     private fun initSharedPreference() {
@@ -173,5 +182,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         val themeMode: String = "THEME_MODE"
+        var isloadDetail = true
     }
 }
