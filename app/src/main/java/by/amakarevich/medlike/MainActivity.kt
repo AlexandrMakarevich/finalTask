@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -50,11 +49,19 @@ class MainActivity : AppCompatActivity() {
         initSharedPreference()
         initViewModel()
         initFragment()
+        if (savedInstanceState == null) {
+            spref.edit().putString(themeMode, EnumThemeMode.DARK.toString()).apply()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         invalidateOptionsMenu()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("MyLog", "MainActitvity_OnDestroy")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -84,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                 invalidateOptionsMenu()
             }
             R.id.dark_bright -> {
-                isloadDetail = false
+                ViewModelFireBase.isloadDetail = false
                 val currentThemeMode = spref.getString(themeMode, "")
                 Log.d("MyLog", "MainActivity_currentThemeMode == $currentThemeMode")
                 when (currentThemeMode) {
@@ -136,7 +143,7 @@ class MainActivity : AppCompatActivity() {
         mMenu?.findItem(R.id.signOut)?.isVisible = false
         mMenu?.findItem(R.id.dark_bright)?.isVisible = false
 
-        if (isloadDetail) {
+        if (ViewModelFireBase.isloadDetail) {
             val fragmentDetailMedCenter =
                 FragmentDetailMedCenter.newInstance(
                     imageUrl,
@@ -160,7 +167,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initFragment() {
         title = resources.getString(R.string.app_name)
-        if (isloadDetail) {
+        if (ViewModelFireBase.isloadDetail) {
             val fragmentLIST = FragmentList.newInstance()
             val fragmentManager: FragmentManager = supportFragmentManager
             val fragmentTransaction = fragmentManager.beginTransaction()
@@ -168,7 +175,7 @@ class MainActivity : AppCompatActivity() {
             fragmentTransaction.commit()
             Log.d("MyLog", "startInitFragment")
         }
-        isloadDetail = false
+        ViewModelFireBase.isloadDetail = false
     }
 
     private fun initSharedPreference() {
@@ -181,7 +188,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        val themeMode: String = "THEME_MODE"
-        var isloadDetail = true
+        const val themeMode: String = "THEME_MODE"
     }
 }

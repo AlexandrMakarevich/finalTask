@@ -92,7 +92,7 @@ class FragmentList : Fragment(), OnClickListenerRating {
             startActivity(intent)
         } else {
             val list = listOf(imageUrl, name, numberOfLikes, numberOfDislikes, rating)
-            MainActivity.isloadDetail = true
+            ViewModelFireBase.isloadDetail = true
             myViewModel.currentMedCenter.value = list
             Log.d("MyLog", mFirebaseUser!!.uid) // уникальный идентификатор пользователя
         }

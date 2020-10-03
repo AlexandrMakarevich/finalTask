@@ -1,5 +1,6 @@
 package by.amakarevich.medlike
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -62,5 +63,14 @@ class ViewModelFireBase : ViewModel() {
 
     val numberOfDislikes: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        isloadDetail = true
+        Log.d("MyLog", "ViewModel_OnCleared")
+    }
+    companion object {
+        var isloadDetail = true
     }
 }
