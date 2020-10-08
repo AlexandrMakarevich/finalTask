@@ -6,15 +6,17 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.tasks.await
 
 class RepositoryFireBase() {
 
     private val db = Firebase.firestore
 
-    suspend fun getDataBase(): List<MedCenter> {
-        return FireBaseAccess.getListOfMedCenters()
+    fun getAllMedCenters(): Flow<List<MedCenter>> {
+        return FireBaseAccess.getAllMedCenters()
     }
+
 
     suspend fun getListOfSnapshotMedCenters(): Flow<List<MedCenter>> {
         return FireBaseAccess.getListOfSnapshotMedCenters()

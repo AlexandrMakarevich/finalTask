@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -17,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FragmentList : Fragment(), OnClickListenerRating {
@@ -32,16 +32,15 @@ class FragmentList : Fragment(), OnClickListenerRating {
 
     private val myViewModel: ViewModelFireBase by activityViewModels()
     private val adapterMed = AdapterMed(this)
-    private val progressBar: ProgressBar?
-        get() {
-            return view?.findViewById(R.id.progressBar)
-        }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("MyLog", "OnCreate FragmentList")
         CoroutineScope(Dispatchers.Main).launch {
-            adapterMed.setItems(myViewModel.getListOfMedCenters())
+            myViewModel.getAllMedCenters().collect {
+                adapterMed.setItems(it)
+            }
         }
     }
 
@@ -59,8 +58,7 @@ class FragmentList : Fragment(), OnClickListenerRating {
         }
 
         myViewModel.data.observe(viewLifecycleOwner, Observer {
-            Log.d("MyLog", it.toString())
-            progressBar?.visibility = ProgressBar.INVISIBLE
+            Log.d("MyLog", "FragmentList_onCreateView_myViewModel.data.observe ${it.toString()}")
             adapterMed.setItems(it)
             it ?: return@Observer
         })

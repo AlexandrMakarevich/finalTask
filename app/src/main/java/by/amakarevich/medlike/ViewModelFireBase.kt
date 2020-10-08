@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import by.amakarevich.medlike.data.MedCenter
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -17,14 +18,15 @@ class ViewModelFireBase : ViewModel() {
 
     init {
         viewModelScope.launch {
+            Log.d("MyLog", "ViewModelScope launch")
             repository.getListOfSnapshotMedCenters().collect {
-            _data.value = it
+                _data.value = it
             }
         }
     }
 
-    suspend fun getListOfMedCenters(): List<MedCenter> {
-        return repository.getDataBase()
+    fun getAllMedCenters(): Flow<List<MedCenter>> {
+        return repository.getAllMedCenters()
     }
 
     suspend fun updateDataMedCentres(document: String, data: HashMap<String, Int>) {
@@ -50,6 +52,7 @@ class ViewModelFireBase : ViewModel() {
     ) {
         repository.addMedCenterInUserMedCenterLike(user, nameMedCenter, data)
     }
+
     //
     // if "currentMedCenter" was changed from FragmentList
     // call FragmentDETAILMEDCENTER from MainActivity
@@ -70,6 +73,7 @@ class ViewModelFireBase : ViewModel() {
         isloadDetail = true
         Log.d("MyLog", "ViewModel_OnCleared")
     }
+
     companion object {
         var isloadDetail = true
     }
